@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.Data.EntityFrameworkCore\Infrastructure.Data.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Infrastructure.External.DanLirisClient.Microservice\Infrastructure.External.DanLirisClient.Microservice.csproj" />
+    <ProjectReference Include="..\Manufactures.Domain\Manufactures.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

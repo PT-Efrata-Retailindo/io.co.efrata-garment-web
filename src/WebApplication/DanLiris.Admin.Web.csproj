@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'WebApplication' " />
+  <ItemGroup>
+    <Compile Remove="Migrations\20190627041255_CuttingIn.cs" />
+    <Compile Remove="Migrations\20190627061508_CuttingTypeMax.cs" />
+    <Compile Remove="Migrations\20190910065535_Initial_Loading.cs" />
+    <Compile Remove="Migrations\20190910065535_Initial_Loading.Designer.cs" />
+    <Compile Remove="Migrations\20220728163929_add-colomn-uom-qty-packing-subcon-service-cutting.cs" />
+    <Compile Remove="Migrations\20220728163929_add-colomn-uom-qty-packing-subcon-service-cutting.Designer.cs" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <PackageReference Include="ExtCore.Data" Version="3.3.0" />
+    <PackageReference Include="ExtCore.Data.EntityFramework.SqlServer" Version="3.3.0" />
+    <PackageReference Include="ExtCore.Mvc" Version="3.3.0" />
+    <PackageReference Include="ExtCore.WebApplication" Version="3.3.0" />
+    <PackageReference Include="FluentScheduler" Version="5.3.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.1.1" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="5.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+	<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Barebone\Barebone.csproj" />
+    <ProjectReference Include="..\Infrastructure.External.DanLirisClient.Microservice\Infrastructure.External.DanLirisClient.Microservice.csproj" />
+    <ProjectReference Include="..\Manufactures\Manufactures.csproj" />
+  </ItemGroup>
+
+</Project>
