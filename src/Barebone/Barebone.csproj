@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <!--<ItemGroup>
+    <Folder Include="Views\Barebone\" />
+    <Folder Include="Views\Shared\" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <EmbeddedResource Include="Styles\**;Scripts\**;Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus.Core" Version="1.5.4" />
+    <PackageReference Include="ExtCore.Data.Abstractions" Version="3.3.0" />
+    <PackageReference Include="ExtCore.Mvc" Version="3.3.0" />
+    <PackageReference Include="ExtCore.Mvc.Infrastructure" Version="3.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.External.DanLirisClient.Microservice\Infrastructure.External.DanLirisClient.Microservice.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
