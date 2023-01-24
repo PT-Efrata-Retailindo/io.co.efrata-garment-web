@@ -39,7 +39,7 @@ namespace Manufactures.Helpers.PDFTemplates
             tableHeader.SetWidths(new float[] { 1f, 1f, 1f });
 
             PdfPCell cellHeaderContentLeft = new PdfPCell() { Border = Rectangle.NO_BORDER };
-            cellHeaderContentLeft.AddElement(new Phrase("PT EFRATA", normal_font));
+            cellHeaderContentLeft.AddElement(new Phrase("PT EFRATA RETAILINDO", normal_font));
             cellHeaderContentLeft.AddElement(new Phrase("SUKOHARJO", normal_font));
             cellHeaderContentLeft.AddElement(new Phrase("BANARAN, GROGOL", normal_font));
             tableHeader.AddCell(cellHeaderContentLeft);
