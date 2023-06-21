@@ -525,7 +525,7 @@ namespace Manufactures.Helpers.PDFTemplates.GarmentSubcon
 
                 #region LEFT
 
-                var branchOfficeY = height - marginTop + 35;
+                var branchOfficeY = height - marginTop + 20;
 
                 byte[] imageByteDL = Convert.FromBase64String(Base64ImageStrings.LOGO_AG_58_58);
                 Image imageDL = Image.GetInstance(imageByteDL);
@@ -555,10 +555,10 @@ namespace Manufactures.Helpers.PDFTemplates.GarmentSubcon
                 cb.AddImage(image, inlineImage: true);
 
                 string[] headOffices = {
-                    "Head Office : JL. MERAPI NO. 23, Banaran, Grogol, Sukoharjo 57552",
+                    "Banaran, Grogol, Sukoharjo 57552",
                     "Central Java, Indonesia",
-                    "TELP.: (+62 271) 732888                  PO BOX 166 Solo, 57100" ,
-                    "Website : www.ambassadorgarmindo.com" ,
+                    "TELP.: (+62 271)719911, (+62 21)2900977" ,
+                    //"Website : www.ambassadorgarmindo.com" ,
                 };
                 for (int i = 0; i < headOffices.Length; i++)
                 {
