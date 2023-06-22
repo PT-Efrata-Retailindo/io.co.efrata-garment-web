@@ -229,7 +229,7 @@ namespace Manufactures.Helpers.PDFTemplates.GarmentSample
             tableSignature.AddCell(cellCenterTopNoBorder);
 
 
-            cellCenterTopNoBorder.Phrase = new Paragraph("Audit\n\n\n\n\n\n\n\n(                                   )", normal_font);
+            cellCenterTopNoBorder.Phrase = new Paragraph("Shipping\n\n\n\n\n\n\n\n(                                   )", normal_font);
             cellCenterTopNoBorder.Colspan = 1;
             tableSignature.AddCell(cellCenterTopNoBorder);
             cellCenterTopNoBorder.Phrase = new Paragraph("\n\n\n\n\n\n\n\n(                                   )", normal_font);
