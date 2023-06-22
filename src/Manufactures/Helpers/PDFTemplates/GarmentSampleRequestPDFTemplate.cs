@@ -93,7 +93,7 @@ namespace Manufactures.Helpers.PDFTemplates
 
             cellLeftNoBorder.Phrase = new Phrase("Kepada", normal_font);
             tableHeader.AddCell(cellLeftNoBorder);
-            cellLeftNoBorder.Phrase = new Phrase(": Kabag Sample Room", normal_font);
+            cellLeftNoBorder.Phrase = new Phrase(": Sample ", normal_font);
             tableHeader.AddCell(cellLeftNoBorder);
 
             cellLeftNoBorder.Phrase = new Phrase("cc", normal_font);
