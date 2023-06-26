@@ -233,7 +233,7 @@ namespace Manufactures.Helpers.PDFTemplates
             tableSignature.AddCell(cellCenterTopNoBorder);
             cellCenterTopNoBorder.Phrase = new Paragraph("\n\n\n\n\n\n\n\n                                   ", normal_font);
             tableSignature.AddCell(cellCenterTopNoBorder);
-            cellCenterTopNoBorder.Phrase = new Paragraph("Kasie\n\n\n\n\n\n\n\n(                                   )", normal_font);
+            cellCenterTopNoBorder.Phrase = new Paragraph("Manager\n\n\n\n\n\n\n\n(                                   )", normal_font);
             tableSignature.AddCell(cellCenterTopNoBorder);
             cellCenterTopNoBorder.Phrase = new Paragraph("\n\n\n\n\n\n\n\n                                   ", normal_font);
             tableSignature.AddCell(cellCenterTopNoBorder);
