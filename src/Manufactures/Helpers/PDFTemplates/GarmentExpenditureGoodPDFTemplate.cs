@@ -40,8 +40,8 @@ namespace Manufactures.Helpers.PDFTemplates
 
             PdfPCell cellHeaderContentLeft = new PdfPCell() { Border = Rectangle.NO_BORDER };
             cellHeaderContentLeft.AddElement(new Phrase("PT EFRATA GARMINDO UTAMA", normal_font));
-            cellHeaderContentLeft.AddElement(new Phrase("SUKOHARJO", normal_font));
-            cellHeaderContentLeft.AddElement(new Phrase("BANARAN, GROGOL", normal_font));
+            cellHeaderContentLeft.AddElement(new Phrase("Head Office : Jl. Merapi No.23 Blok E1, Desa/Kelurahan Banaran, Kec. Grogol, Kab. Sukoharjo, Provinsi Jawa Tengah", normal_font));
+            cellHeaderContentLeft.AddElement(new Phrase("Kode Pos: 57552, Telp: 02711740888", normal_font));
             tableHeader.AddCell(cellHeaderContentLeft);
 
             PdfPCell cellHeaderContentCenter = new PdfPCell() { Border = Rectangle.NO_BORDER };
