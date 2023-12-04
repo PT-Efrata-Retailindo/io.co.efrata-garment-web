@@ -24,6 +24,12 @@ namespace Manufactures.Domain.GarmentSample.SampleDeliveryReturns.ReadModels
         public int UomId { get; internal set; }
         public string UomUnit { get; internal set; }
         public string UId { get; set; }
+
+        public string Colour { get; internal set; }
+        public string Rack { get; internal set; }
+        public string Level { get; internal set; }
+        public string Box { get; internal set; }
+        public string Area { get; internal set; }
         public virtual GarmentSampleDeliveryReturnReadModel GarmentSampleDeliveryReturnIdentity { get; internal set; }
     }
 }

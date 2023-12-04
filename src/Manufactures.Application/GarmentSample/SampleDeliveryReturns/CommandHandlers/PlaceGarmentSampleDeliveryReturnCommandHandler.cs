@@ -55,7 +55,7 @@ namespace Manufactures.Application.GarmentSample.SampleDeliveryReturns.CommandHa
             if (garmentSampleDeliveryReturn == null)
             {
                 garmentSampleDeliveryReturn = new GarmentSampleDeliveryReturn(Guid.NewGuid(), GenerateDRNo(request), request.RONo, request.Article, request.UnitDOId, request.UnitDONo, request.UENId, request.PreparingId, request.ReturnDate, request.ReturnType, new UnitDepartmentId(request.Unit.Id), request.Unit.Code, request.Unit.Name, new StorageId(request.Storage.Id), request.Storage.Name, request.Storage.Code, request.IsUsed);
-                request.Items.Select(x => new GarmentSampleDeliveryReturnItem(Guid.NewGuid(), garmentSampleDeliveryReturn.Identity, x.UnitDOItemId, x.UENItemId, x.PreparingItemId, new ProductId(x.Product.Id), x.Product.Code, x.Product.Name, x.DesignColor, x.RONo, x.Quantity, new UomId(x.Uom.Id), x.Uom.Unit)).ToList()
+                request.Items.Select(x => new GarmentSampleDeliveryReturnItem(Guid.NewGuid(), garmentSampleDeliveryReturn.Identity, x.UnitDOItemId, x.UENItemId, x.PreparingItemId, new ProductId(x.Product.Id), x.Product.Code, x.Product.Name, x.DesignColor, x.RONo, x.Quantity, new UomId(x.Uom.Id), x.Uom.Unit, x.Colour, x.Rack, x.Level, x.Box, x.Area)).ToList()
                     .ForEach(async x => await _garmentSampleDeliveryReturnItemRepository.Update(x));
             }
 

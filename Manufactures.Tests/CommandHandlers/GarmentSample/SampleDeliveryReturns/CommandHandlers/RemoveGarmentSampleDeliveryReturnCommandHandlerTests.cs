@@ -64,7 +64,7 @@ namespace Manufactures.Tests.CommandHandlers.GarmentSample.SampleDeliveryReturns
             .Setup(s => s.Find(It.IsAny<Expression<Func<GarmentSampleDeliveryReturnItemReadModel, bool>>>()))
             .Returns(new List<GarmentSampleDeliveryReturnItem>()
             {
-               new GarmentSampleDeliveryReturnItem(id,id,1,1,"preparingItemId",new ProductId(1),"productCode","FABRIC","designColor","roNo",1,new UomId(1),"uomUnit")
+               new GarmentSampleDeliveryReturnItem(id,id,1,1,"preparingItemId",new ProductId(1),"productCode","FABRIC","designColor","roNo",1,new UomId(1),"uomUnit","","","","","")
             });
 
             _mockGarmentSampleDeliveryReturnItemRepository

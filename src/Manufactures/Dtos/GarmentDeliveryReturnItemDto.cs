@@ -23,6 +23,11 @@ namespace Manufactures.Dtos
             RONo = garmentDeliveryReturnItem.RONo;
             Quantity = garmentDeliveryReturnItem.Quantity;
             Uom = new Uom(garmentDeliveryReturnItem.UomId.Value, garmentDeliveryReturnItem.UomUnit);
+            Area = garmentDeliveryReturnItem.Area;
+            Box = garmentDeliveryReturnItem.Box;
+            Colour = garmentDeliveryReturnItem.Colour;
+            Level = garmentDeliveryReturnItem.Level;
+            Rack = garmentDeliveryReturnItem.Rack;
         }
 
         public Guid Id { get; set; }
@@ -39,5 +44,10 @@ namespace Manufactures.Dtos
         public string RONo { get; set; }
         public double Quantity { get; set; }
         public Uom Uom { get; set; }
+        public string Colour { get; set; }
+        public string Rack { get; set; }
+        public string Level { get; set; }
+        public string Box { get; set; }
+        public string Area { get; set; }
     }
 }

@@ -236,7 +236,7 @@ namespace Manufactures.Tests.Queries.GarmentPreparings.WIP
                 .Setup(s => s.Query)
                 .Returns(new List<GarmentDeliveryReturnItemReadModel>
                 {
-                    new GarmentDeliveryReturnItem(guidDeliveryReturnItem,guidDeliveryReturn,1,1,guidPreparingItem.ToString(), new Domain.GarmentDeliveryReturns.ValueObjects.ProductId(1),"","","","",9, new Domain.GarmentDeliveryReturns.ValueObjects.UomId(1),"").GetReadModel()
+                    new GarmentDeliveryReturnItem(guidDeliveryReturnItem,guidDeliveryReturn,1,1,guidPreparingItem.ToString(), new Domain.GarmentDeliveryReturns.ValueObjects.ProductId(1),"","","","",9, new Domain.GarmentDeliveryReturns.ValueObjects.UomId(1),"","","","","","").GetReadModel()
                 }.AsQueryable());
 
 

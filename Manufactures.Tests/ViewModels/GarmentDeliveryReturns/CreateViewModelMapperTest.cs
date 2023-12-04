@@ -48,7 +48,7 @@ namespace Manufactures.Tests.ViewModels.GarmentDeliveryReturns
         public void MapItem_Return_Success()
         {
             Guid id = Guid.NewGuid();
-            GarmentDeliveryReturnItemDto dto = new GarmentDeliveryReturnItemDto(new GarmentDeliveryReturnItem(id,id,1,1,"preparingItemId",new ProductId(1),"productCode", "productName","designColor","roNo",1,new UomId(1),"uomUnit"));
+            GarmentDeliveryReturnItemDto dto = new GarmentDeliveryReturnItemDto(new GarmentDeliveryReturnItem(id,id,1,1,"preparingItemId",new ProductId(1),"productCode", "productName","designColor","roNo",1,new UomId(1),"uomUnit", "", "", "", "", ""));
             CreateViewModelMapper viewModelMapper = new CreateViewModelMapper();
             viewModelMapper.MapItem(dto, id);
         }
