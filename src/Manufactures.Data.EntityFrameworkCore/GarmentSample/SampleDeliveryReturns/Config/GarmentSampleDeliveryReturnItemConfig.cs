@@ -27,6 +27,16 @@ namespace Manufactures.Data.EntityFrameworkCore.GarmentSample.SampleDeliveryRetu
                .HasMaxLength(100);
             builder.Property(a => a.UomUnit)
                .HasMaxLength(100);
+            builder.Property(a => a.Rack)
+              .HasMaxLength(100);
+            builder.Property(a => a.Level)
+              .HasMaxLength(100);
+            builder.Property(a => a.Colour)
+              .HasMaxLength(100);
+            builder.Property(a => a.Box)
+              .HasMaxLength(100);
+            builder.Property(a => a.Area)
+              .HasMaxLength(100);
 
             builder.ApplyAuditTrail();
             builder.ApplySoftDelete();

@@ -143,7 +143,7 @@ namespace Manufactures.Tests.Queries.GarmentSamplePreparing
 				.Setup(s => s.Query)
 				.Returns(new List<GarmentSampleDeliveryReturnItemReadModel>
 				{
-					new GarmentSampleDeliveryReturnItem(guidDeliveryReturnItem,guidDeliveryReturn,1,1,guidPrepareItem.ToString(), new Domain.GarmentSample.SampleDeliveryReturns.ValueObjects.ProductId(1),"","","","",9, new Domain.GarmentSample.SampleDeliveryReturns.ValueObjects.UomId(1),"").GetReadModel()
+					new GarmentSampleDeliveryReturnItem(guidDeliveryReturnItem,guidDeliveryReturn,1,1,guidPrepareItem.ToString(), new Domain.GarmentSample.SampleDeliveryReturns.ValueObjects.ProductId(1),"","","","",9, new Domain.GarmentSample.SampleDeliveryReturns.ValueObjects.UomId(1),"","","","","","").GetReadModel()
 				}.AsQueryable());
 			_mockGarmentDeliveryReturnRepository
 				.Setup(s => s.Query)

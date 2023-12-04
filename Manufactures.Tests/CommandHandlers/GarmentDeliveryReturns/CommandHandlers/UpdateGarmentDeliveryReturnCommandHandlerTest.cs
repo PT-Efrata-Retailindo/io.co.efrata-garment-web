@@ -67,7 +67,7 @@ namespace Manufactures.Tests.CommandHandlers.GarmentDeliveryReturns.CommandHandl
             .Setup(s => s.Find(It.IsAny<Expression<Func<GarmentDeliveryReturnItemReadModel, bool>>>()))
             .Returns(new List<GarmentDeliveryReturnItem>()
              {
-               new GarmentDeliveryReturnItem(id,id,1,1,"preparingItemId",new ProductId(1),"productCode","FABRIC","designColor","roNo",1,new UomId(1),"uomUnit")
+               new GarmentDeliveryReturnItem(id,id,1,1,"preparingItemId",new ProductId(1),"productCode","FABRIC","designColor","roNo",1,new UomId(1),"uomUnit","","","","","")
              });
 
              GarmentPreparingItem garmentDeliveryReturnItem = new GarmentPreparingItem(id, 1, new Domain.GarmentPreparings.ValueObjects.ProductId(1), "productCode", "productName", "designColor", 1, new Domain.GarmentPreparings.ValueObjects.UomId(1), "uomUnit", "fabricType", 1, 1, id,null, "fasilitas");
@@ -177,7 +177,7 @@ namespace Manufactures.Tests.CommandHandlers.GarmentDeliveryReturns.CommandHandl
             .Setup(s => s.Find(It.IsAny<Expression<Func<GarmentDeliveryReturnItemReadModel, bool>>>()))
             .Returns(new List<GarmentDeliveryReturnItem>()
              {
-               new GarmentDeliveryReturnItem(id,id,1,1,"preparingItemId",new ProductId(1),"productCode","FABRIC","designColor","roNo",1,new UomId(1),"uomUnit")
+               new GarmentDeliveryReturnItem(id,id,1,1,"preparingItemId",new ProductId(1),"productCode","FABRIC","designColor","roNo",1,new UomId(1),"uomUnit","","","","","")
              });
 
             GarmentPreparingItem garmentDeliveryReturnItem = new GarmentPreparingItem(id, 1, new Domain.GarmentPreparings.ValueObjects.ProductId(1), "productCode", "productName", "designColor", 1, new Domain.GarmentPreparings.ValueObjects.UomId(1), "uomUnit", "fabricType", 1, 1, id,null, "fasilitas");

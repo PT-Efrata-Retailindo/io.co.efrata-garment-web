@@ -81,7 +81,7 @@ namespace Manufactures.Tests.Controllers.Api
                 .Setup(s => s.Find(It.IsAny<IQueryable<GarmentDeliveryReturnItemReadModel>>()))
                 .Returns(new List<GarmentDeliveryReturnItem>()
                 {
-                    new GarmentDeliveryReturnItem(Guid.NewGuid(), Guid.NewGuid(), 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null)
+                    new GarmentDeliveryReturnItem(Guid.NewGuid(), Guid.NewGuid(), 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null,"","","","","")
                 });
 
             _mockGarmentDeliveryReturnItemRepository
@@ -121,7 +121,7 @@ namespace Manufactures.Tests.Controllers.Api
                 .Setup(s => s.Find(It.IsAny<Expression<Func<GarmentDeliveryReturnItemReadModel, bool>>>()))
                 .Returns(new List<GarmentDeliveryReturnItem>()
                 {
-                    new GarmentDeliveryReturnItem(Guid.NewGuid(), Guid.NewGuid(), 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null)
+                    new GarmentDeliveryReturnItem(Guid.NewGuid(), Guid.NewGuid(), 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null,"","","","","")
                 });
 
             // Act
@@ -240,7 +240,7 @@ namespace Manufactures.Tests.Controllers.Api
                 .Setup(s => s.Find(It.IsAny<Expression<Func<GarmentDeliveryReturnItemReadModel, bool>>>()))
                 .Returns(new List<GarmentDeliveryReturnItem>()
                 {
-                    new GarmentDeliveryReturnItem(id, id, 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null)
+                    new GarmentDeliveryReturnItem(id, id, 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null,"","","","","")
                 });
 
             UpdateGarmentDeliveryReturnCommand command = new UpdateGarmentDeliveryReturnCommand();
@@ -278,7 +278,7 @@ namespace Manufactures.Tests.Controllers.Api
                 .Setup(s => s.Find(It.IsAny<Expression<Func<GarmentDeliveryReturnItemReadModel, bool>>>()))
                 .Returns(new List<GarmentDeliveryReturnItem>()
                 {
-                    new GarmentDeliveryReturnItem(id, id, 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null)
+                    new GarmentDeliveryReturnItem(id, id, 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null,"","","","","")
                 });
 
             UpdateGarmentDeliveryReturnCommand command = new UpdateGarmentDeliveryReturnCommand();
@@ -311,7 +311,7 @@ namespace Manufactures.Tests.Controllers.Api
                 .Setup(s => s.Find(It.IsAny<Expression<Func<GarmentDeliveryReturnItemReadModel, bool>>>()))
                 .Returns(new List<GarmentDeliveryReturnItem>()
                 {
-                    new GarmentDeliveryReturnItem(Guid.NewGuid(), Guid.NewGuid(), 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null)
+                    new GarmentDeliveryReturnItem(Guid.NewGuid(), Guid.NewGuid(), 0, 0, null, new ProductId(1), null, null, null, "RONo", 0, new UomId(1), null,"","","","","")
                 });
 
             _MockMediator
