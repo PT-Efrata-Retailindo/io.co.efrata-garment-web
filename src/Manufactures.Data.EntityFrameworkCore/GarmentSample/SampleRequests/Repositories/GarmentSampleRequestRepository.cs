@@ -33,7 +33,7 @@ namespace Manufactures.Data.EntityFrameworkCore.GarmentSample.SampleRequests.Rep
             data = QueryHelper<GarmentSampleRequestReadModel>.Search(data, SearchAttributes, keyword);
 
             Dictionary<string, string> OrderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-            data = OrderDictionary.Count == 0 ? data.OrderByDescending(o => o.ModifiedDate) : QueryHelper<GarmentSampleRequestReadModel>.Order(data, OrderDictionary);
+            data = OrderDictionary.Count == 0 ? data.OrderBy(o => o.IsReceived).ThenByDescending(o=>o.Date) : QueryHelper<GarmentSampleRequestReadModel>.Order(data, OrderDictionary);
 
 
             return data;
