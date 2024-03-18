@@ -53,7 +53,7 @@ namespace Manufactures.Application.GarmentFinishingOuts.CommandHandlers
         {
             request.Items = request.Items.Where(item => item.IsSave == true).ToList();
 
-            GarmentComodityPrice garmentComodityPrice = _garmentComodityPriceRepository.Query.Where(a => a.IsValid == true && a.UnitId == request.UnitTo.Id && a.ComodityId == request.Comodity.Id).Select(s => new GarmentComodityPrice(s)).Single();
+            GarmentComodityPrice garmentComodityPrice = _garmentComodityPriceRepository.Query.Where(a => a.IsValid == true && a.UnitId == request.UnitTo.Id && a.ComodityId == request.Comodity.Id).OrderByDescending(x => x.CreatedDate).Select(s => new GarmentComodityPrice(s)).First();
             Guid garmentFinishingOutId = Guid.NewGuid();
             GarmentFinishingOut garmentFinishingOut = new GarmentFinishingOut(
                 garmentFinishingOutId,
