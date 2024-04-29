@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20240429094331_Update-Max-Article")]
+    partial class UpdateMaxArticle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1067,15 +1069,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Area")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Box")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Colour")
-                        .HasMaxLength(100);
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(32);
@@ -1093,9 +1086,6 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("DesignColor")
                         .HasMaxLength(2000);
-
-                    b.Property<string>("Level")
-                        .HasMaxLength(100);
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
@@ -1115,9 +1105,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<double>("Quantity");
 
                     b.Property<string>("RONo")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Rack")
                         .HasMaxLength(100);
 
                     b.Property<byte[]>("RowVersion")
@@ -3240,15 +3227,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Area")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Box")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Colour")
-                        .HasMaxLength(100);
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(32);
@@ -3266,9 +3244,6 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("DesignColor")
                         .HasMaxLength(2000);
-
-                    b.Property<string>("Level")
-                        .HasMaxLength(100);
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
@@ -3288,9 +3263,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<double>("Quantity");
 
                     b.Property<string>("RONo")
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Rack")
                         .HasMaxLength(100);
 
                     b.Property<byte[]>("RowVersion")
