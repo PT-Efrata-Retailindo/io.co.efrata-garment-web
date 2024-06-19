@@ -237,69 +237,69 @@ namespace Manufactures.Application.GarmentExpenditureGoods.Queries
 							//buyerCode = (from cost in costCalculation.data where cost.ro == a.RONo select cost.buyerCode).FirstOrDefault(),
 							expenditureDate = a.ExpenditureDate,
 							expenditureGoodNo = a.ExpenditureGoodNo,
-							//buyerArticle = a.BuyerCode + " " + a.Article,
+							buyerArticle = a.BuyerCode + " " + a.Article,
 							comodityCode = a.ComodityCode,
 							comodityName = a.ComodityName,
 							uomUnit = b.UomUnit,
 							//itemCode = 
-							//roNo = a.RONo,
-							//expenditureGoodType = a.ExpenditureType,
+							roNo = a.RONo,
+							expenditureGoodType = a.ExpenditureType,
 							invoice = a.Invoice,
-							//colour = b.Description,
+							colour = b.Description,
 							qty = b.Quantity,
 							//name = (from cost in costCalculation.data where cost.ro == a.RONo select cost.comodityName).FirstOrDefault(),
-							//unitname = a.UnitName
+							unitname = a.UnitName
 						};
 
-			var querySum = Query.ToList().GroupBy(x => new { x.expenditureDate, x.expenditureGoodNo, x.invoice, x.comodityCode, x.comodityName, x.uomUnit }, (key, group) => new
+			var querySum = Query.ToList().GroupBy(x => new { x.expenditureDate, x.expenditureGoodNo, x.invoice, x.comodityCode, x.comodityName, x.uomUnit, x.roNo, x.buyerArticle, x.expenditureGoodType, x.colour, x.unitname }, (key, group) => new
 			{
-				//ros = key.roNo,
-				//buyer = key.buyerArticle,
-				expenditureDates = key.expenditureDate,
+				roNo = key.roNo,
+				buyerArticle = key.buyerArticle,
+				expenditureDate = key.expenditureDate,
 				qty = group.Sum(s => s.qty),
-				expendituregoodNo = key.expenditureGoodNo,
-				//expendituregoodTypes = key.expenditureGoodType,
-				//color = key.colour,
+				expenditureGoodNo = key.expenditureGoodNo,
+				expenditureGoodType = key.expenditureGoodType,
+				colour = key.colour,
 				//price= group.Sum(s=>s.price),
 				//buyerC= key.buyerCode,
 				//names = key.name,
-				//            unitname = key.unitname,
-				invoices = key.invoice,
+				unitname = key.unitname,
+				invoice = key.invoice,
 				//fcs = key.fc
 				comodityCode = key.comodityCode,
 				comodityName = key.comodityName,
 				uomUnit = key.uomUnit,
 
-			}).OrderBy(s => s.expendituregoodNo);
+			}).OrderBy(s => s.expenditureGoodNo);
 
-			var Pebs = await GetDataPEB(querySum.Select(x => x.invoices).ToList(), request.token);
+			//var Pebs = await GetDataPEB(querySum.Select(x => x.invoices).ToList(), request.token);
 
 			foreach (var item in querySum)
 			{
-				var peb = Pebs.data.FirstOrDefault(x => x.BonNo.Trim() == item.invoices);
+				//var peb = Pebs.data.FirstOrDefault(x => x.BonNo.Trim() == item.invoices);
 				//DateTime? non = null;
 
 				GarmentMonitoringExpenditureGoodDto dto = new GarmentMonitoringExpenditureGoodDto
 				{
-					//roNo = item.ros,
-					//buyerArticle = item.buyer,
-					//expenditureGoodType = item.expendituregoodTypes,
-					pebDate = peb == null ? "-" : peb.BCDate.ToString("dd MMM yyyy"),
-					pebNo = peb == null ? "-" : peb.BCNo,
-					buyerName = peb == null ? "-" : peb.BuyerName,
-					country = peb == null ? "-" : peb.Country,
-					currencyCode = peb == null ? "-" : peb.CurrencyCode,
-					expenditureGoodNo = item.expendituregoodNo,
-					expenditureDate = item.expenditureDates,
+					roNo = item.roNo,
+					buyerArticle = item.buyerArticle,
+					expenditureGoodType = item.expenditureGoodType,
+					//pebDate = peb == null ? "-" : peb.BCDate.ToString("dd MMM yyyy"),
+					//pebNo = peb == null ? "-": peb.BCNo,
+					//buyerName = peb == null ? "-" : peb.BuyerName,
+					//country = peb == null ? "-" : peb.Country,
+					//currencyCode = peb == null ? "-" : peb.CurrencyCode,
+					expenditureGoodNo = item.expenditureGoodNo,
+					expenditureDate = item.expenditureDate,
 					qty = item.qty,
 					comodityCode = item.comodityCode,
 					comodityName = item.comodityName,
 					uomUnit = item.uomUnit,
-					price = (decimal)((peb == null ? 0 : peb.Nominal) * (peb == null ? 0 : peb.Quantity)),
-					//colour = item.color,
-					//name = item.names,
-					//unitname = item.unitname,
-					invoice = item.invoices,
+					//price = (decimal)((peb == null ? 0 : peb.Nominal) * (peb == null ? 0 : peb.Quantity)),
+					colour = item.colour,
+					name = item.comodityName,
+					unitname = item.unitname,
+					invoice = item.invoice,
 					//price= Math.Round(Convert.ToDecimal(Convert.ToDouble( Math.Round(item.price,2)) * Math.Round(item.fcs,2)),2),
 					//buyerCode=item.buyerC
 
@@ -340,20 +340,23 @@ namespace Manufactures.Application.GarmentExpenditureGoods.Queries
 			listViewModel.garmentMonitorings = monitoringDtos;
 			var reportDataTable = new DataTable();
 			//reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NO", DataType = typeof(int) });
-			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NO PEB", DataType = typeof(string) });
-			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "TGL PEB", DataType = typeof(string) });
+			//reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NO PEB", DataType = typeof(string) });
+			//reportDataTable.Columns.Add(new DataColumn() { ColumnName = "TGL PEB", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NO KELUAR", DataType = typeof(string) });
+			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "TIPE KELUAR", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "TGL KELUAR", DataType = typeof(string) });
-			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "PEMBELI / PENERIMA", DataType = typeof(string) });
-			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NEGARA TUJUAN", DataType = typeof(string) });
+			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "RONO", DataType = typeof(string) });
+			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "PEMBELI + ARTIKEL", DataType = typeof(string) });
+			//reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NEGARA TUJUAN", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "KODE BARANG", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NAMA BARANG", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "SATUAN", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "JUMLAH", DataType = typeof(double) });
-			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "MATA UANG", DataType = typeof(string) });
-			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NILAI BARANG", DataType = typeof(decimal) });
-			int counter = 5;
-			int index = 1;
+			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "INVOICE", DataType = typeof(double) });
+            //reportDataTable.Columns.Add(new DataColumn() { ColumnName = "MATA UANG", DataType = typeof(string) });
+            //reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NILAI BARANG", DataType = typeof(decimal) });
+            int counter = 5;
+            int index = 1;
 			if (listViewModel.garmentMonitorings.Count > 0)
 			{
 				foreach (var report in listViewModel.garmentMonitorings)
@@ -362,8 +365,8 @@ namespace Manufactures.Application.GarmentExpenditureGoods.Queries
                     //string pebDate = report.pebDate == null ? "-" : report.pebDate.Value.ToString("dd MM yyyy");
 					string ExpenDate = report.expenditureDate == null ? "-" : report.expenditureDate.Value.ToString("dd MM yyyy");
 					//Console.WriteLine(pebDate);
-					reportDataTable.Rows.Add(report.pebNo,report.pebDate, report.expenditureGoodNo,ExpenDate, report.buyerName, report.country, report.comodityCode,
-						report.comodityName, report.uomUnit, report.qty, report.currencyCode, report.price);
+					reportDataTable.Rows.Add(/*report.pebNo,report.pebDate,*/ report.expenditureGoodNo,report.expenditureGoodType,ExpenDate,report.roNo, report.buyerArticle, /*report.country,*/ report.comodityCode,
+						report.comodityName, report.uomUnit, report.qty,report.invoice/*, report.currencyCode, report.price*/);
 					counter++;
                     //Console.WriteLine(counter);
                 }
@@ -387,10 +390,10 @@ namespace Manufactures.Application.GarmentExpenditureGoods.Queries
 				worksheet.Cells["I" + 2 + ":K" + counter + ""].Style.Numberformat.Format = "#,##0.00";
 				worksheet.Column(9).Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 				worksheet.Cells["J" + 2 + ":J" + counter + ""].Style.Numberformat.Format = "#,##0.00";
-				worksheet.Cells["A" + 5 + ":L" + counter + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-				worksheet.Cells["A" + 5 + ":L" + counter + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-				worksheet.Cells["A" + 5 + ":L" + counter + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-				worksheet.Cells["A" + 5 + ":L" + counter + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+				worksheet.Cells["A" + 5 + ":J" + counter + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+				worksheet.Cells["A" + 5 + ":J" + counter + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+				worksheet.Cells["A" + 5 + ":J" + counter + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+				worksheet.Cells["A" + 5 + ":J" + counter + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
 				worksheet.Cells["I" + (counter) + ":J" + (counter) + ""].Style.Font.Bold = true;
 				worksheet.Cells["A" + 5 + ":L" + 5 + ""].Style.Font.Bold = true;
 				var stream = new MemoryStream();
@@ -398,7 +401,7 @@ namespace Manufactures.Application.GarmentExpenditureGoods.Queries
 				{
 					worksheet.Cells["A" + (counter) + ":I" + (counter) + ""].Merge = true;
 
-					worksheet.Column(9).Hidden = true;
+					worksheet.Column(11).Hidden = true;
 				}else
 				{
 					worksheet.Cells["A" + (counter) + ":H" + (counter) + ""].Merge = true;
