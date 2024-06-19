@@ -352,6 +352,7 @@ namespace Manufactures.Application.GarmentExpenditureGoods.Queries
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NAMA BARANG", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "SATUAN", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "JUMLAH", DataType = typeof(double) });
+			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "INVOICE", DataType = typeof(double) });
             //reportDataTable.Columns.Add(new DataColumn() { ColumnName = "MATA UANG", DataType = typeof(string) });
             //reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NILAI BARANG", DataType = typeof(decimal) });
             int counter = 5;
@@ -365,7 +366,7 @@ namespace Manufactures.Application.GarmentExpenditureGoods.Queries
 					string ExpenDate = report.expenditureDate == null ? "-" : report.expenditureDate.Value.ToString("dd MM yyyy");
 					//Console.WriteLine(pebDate);
 					reportDataTable.Rows.Add(/*report.pebNo,report.pebDate,*/ report.expenditureGoodNo,report.expenditureGoodType,ExpenDate,report.roNo, report.buyerArticle, /*report.country,*/ report.comodityCode,
-						report.comodityName, report.uomUnit, report.qty/*, report.currencyCode, report.price*/);
+						report.comodityName, report.uomUnit, report.qty,report.invoice/*, report.currencyCode, report.price*/);
 					counter++;
                     //Console.WriteLine(counter);
                 }
@@ -400,7 +401,7 @@ namespace Manufactures.Application.GarmentExpenditureGoods.Queries
 				{
 					worksheet.Cells["A" + (counter) + ":I" + (counter) + ""].Merge = true;
 
-					worksheet.Column(10).Hidden = true;
+					worksheet.Column(11).Hidden = true;
 				}else
 				{
 					worksheet.Cells["A" + (counter) + ":H" + (counter) + ""].Merge = true;
