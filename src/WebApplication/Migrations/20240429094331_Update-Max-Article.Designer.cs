@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20240429094331_Update-Max-Article")]
+    partial class UpdateMaxArticle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1583,7 +1585,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<Guid>("AdjustmentItemId");
 
                     b.Property<string>("Article")
-                        .HasMaxLength(5000);
+                        .HasMaxLength(50);
 
                     b.Property<double>("BasicPrice");
 
