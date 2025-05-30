@@ -19,6 +19,7 @@ using Manufactures.Domain.GarmentDeliveryReturns.Repositories;
 using System.IO;
 using System.Data;
 using OfficeOpenXml;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepare
 {
@@ -126,26 +127,26 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
             DateTimeOffset dateTo = new DateTimeOffset(request.dateTo);
 			dateTo = dateTo.AddHours(7);
 
-			var QueryMutationPrepareNow = from a in (from aa in garmentPreparingRepository.Query
-													 where aa.UnitId == request.unit && aa.ProcessDate.Value.AddHours(7) <= dateTo
-													 select new
-													 {
-														 aa.Identity,
-														 aa.Article,
-														 aa.BuyerCode,
-														 aa.RONo,
-														 aa.ProcessDate
-													 })
-										  join b in garmentPreparingItemRepository.Query on a.Identity equals b.GarmentPreparingId
-										  select new
-										  {
-											  Buyer = a.BuyerCode,
-											  RO = a.RONo,
-											  Articles = a.Article,
-											  Id = a.Identity,
-											  DetailExpend = b.UENItemId,
-											  Processdate = a.ProcessDate
-										  };
+			var QueryMutationPrepareNow = (from a in (from aa in garmentPreparingRepository.Query
+													  where aa.UnitId == request.unit && aa.ProcessDate.Value.AddHours(7) <= dateTo
+													  select new
+													  {
+														  aa.Identity,
+														  aa.Article,
+														  aa.BuyerCode,
+														  aa.RONo,
+														  aa.ProcessDate
+													  })
+										   join b in garmentPreparingItemRepository.Query on a.Identity equals b.GarmentPreparingId
+										   select new
+										   {
+											   Buyer = a.BuyerCode,
+											   RO = a.RONo,
+											   Articles = a.Article,
+											   Id = a.Identity,
+											   DetailExpend = b.UENItemId,
+											   Processdate = a.ProcessDate
+										   }).ToList();
 
 			//OLD QUERY
 			//      var sumbasicPrice = (from a in ( from aa in garmentPreparingRepository.Query
@@ -167,7 +168,7 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 			//});
 
 			//NEW QUERY
-			var sumbasicPrice = (from a in (from aa in garmentPreparingRepository.Query
+			var sumbasicPrice = await (from a in (from aa in garmentPreparingRepository.Query
 											where aa.UnitId == request.unit
 											select new
 											{
@@ -186,10 +187,10 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 						   Total = Convert.ToDecimal(group.Sum(s => s.BasicPrice) / group.Count())
 						   //BasicPrice = Convert.ToDecimal(group.Sum(s => s.BasicPrice)),
 						   //Count = group.Count()
-					   });
+					   }).ToListAsync();
+            var sumbasicPriceDict = sumbasicPrice.ToDictionary(x => x.RO, x => x.Total);
 
-
-			var QueryMutationPrepareItemsROASAL = (from a in QueryMutationPrepareNow
+            var QueryMutationPrepareItemsROASAL = (from a in QueryMutationPrepareNow
 												   join b in garmentPreparingItemRepository.Query on a.Id equals b.GarmentPreparingId
 												   where b.UENItemId == a.DetailExpend
 												   select new
@@ -197,8 +198,9 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 													   article = a.Articles,
 													   roJob = a.RO,
 													   buyerCode = a.Buyer,
-													   price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == a.RO select aa.Total).FirstOrDefault()),
-													   prepareitemid = b.Identity,
+													   //price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == a.RO select aa.Total).FirstOrDefault()),
+													   price = sumbasicPriceDict.ContainsKey(a.RO) ? sumbasicPriceDict[a.RO] : 0,
+                                                       prepareitemid = b.Identity,
 													   roasal = b.ROSource
 												   });
 
@@ -228,43 +230,80 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 			//	remainQty = 0 
 			//};
 
-			//NEW QUERY
-			var QueryCuttingDONow = from a in (from data in garmentCuttingInRepository.Query
-											   where data.UnitId == request.unit && data.CuttingInDate.AddHours(7) <= dateTo
-											   select new
-											   {
-												   data.RONo,
-												   data.Identity,
-												   data.CuttingInDate,
-												   data.CuttingType
-											   })
-									join b in garmentCuttingInItemRepository.Query on a.Identity equals b.CutInId
-									join c in garmentCuttingInDetailRepository.Query on b.Identity equals c.CutInItemId
-									join d in garmentPreparingItemRepository.Query on c.PreparingItemId equals d.Identity
-									select new monitoringView
-									{
-										prepareItemid = c.PreparingItemId,
-										price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == a.RONo select aa.Total).FirstOrDefault()),
-										expenditure = 0,
-										aval = 0,
-										uomUnit = "",
-										stock = a.CuttingInDate.AddHours(7) < dateFrom ? -c.PreparingQuantity : 0,
-										nonMainFabricExpenditure = a.CuttingType == "Non Main Fabric" && (a.CuttingInDate >= dateFrom) ? c.PreparingQuantity : 0,
-										mainFabricExpenditure = a.CuttingType == "Main Fabric" && (a.CuttingInDate >= dateFrom) ? c.PreparingQuantity : 0,
-										remark = d.DesignColor,
-										receipt = 0,
-										productCode = c.ProductCode,
-										remainQty = 0
-									};
+			var cuttingQuery = (from data in garmentCuttingInRepository.Query
+								where data.UnitId == request.unit && data.CuttingInDate.AddHours(7).Date <= dateTo.Date
+								select new
+								{
+									data.RONo,
+									data.Identity,
+									data.CuttingInDate,
+									data.CuttingType
+								});
+            var cuttingIds = cuttingQuery.Select(c => c.Identity).ToList();
 
-			var QueryMutationPrepareItemNow = (from d in QueryMutationPrepareNow
+            var cuttingInItems = garmentCuttingInItemRepository.Query
+                .Where(x => cuttingIds.Contains(x.CutInId))
+                .Select(x => new { x.Identity, x.CutInId }).ToList();
+
+            var cuttingInItemIds = cuttingInItems.Select(x => x.Identity).ToList();
+
+            var cuttingInDetails = garmentCuttingInDetailRepository.Query
+                .Where(x => cuttingInItemIds.Contains(x.CutInItemId))
+                .Select(x => new
+                {
+                    x.CutInItemId,
+                    x.PreparingItemId,
+                    x.PreparingQuantity,
+                    x.ProductCode
+                }).ToList();
+
+            var preparingItemId = cuttingInDetails.Select(x => x.PreparingItemId).ToList();
+
+            var preparingItemsData = garmentPreparingItemRepository.Query
+                .Where(x => preparingItemId.Contains(x.Identity))
+                .Select(x => new { x.Identity, x.DesignColor }).ToList();
+
+            var QueryCuttingDONowRaw = (from a in cuttingQuery
+                                        join b in cuttingInItems on a.Identity equals b.CutInId
+                                        join c in cuttingInDetails on b.Identity equals c.CutInItemId
+                                        join d in preparingItemsData on c.PreparingItemId equals d.Identity
+                                        select new
+                                        {
+                                            RONo = a.RONo,
+                                            CuttingInDate = a.CuttingInDate,
+                                            CuttingType = a.CuttingType,
+                                            PreparingItemId = c.PreparingItemId,
+                                            PreparingQuantity = c.PreparingQuantity,
+                                            DesignColor = d.DesignColor,
+                                            ProductCode = c.ProductCode
+                                        });
+
+            //NEW QUERY
+            var QueryCuttingDONow = QueryCuttingDONowRaw.Select(x => new monitoringView
+            {
+                prepareItemid = x.PreparingItemId,
+                price = sumbasicPriceDict.ContainsKey(x.RONo) ? sumbasicPriceDict[x.RONo] : 0,
+                expenditure = 0,
+                aval = 0,
+                uomUnit = "",
+                stock = x.CuttingInDate.AddHours(7).Date < dateFrom.Date ? -x.PreparingQuantity : 0,
+                nonMainFabricExpenditure = x.CuttingType == "Non Main Fabric" && x.CuttingInDate.AddHours(7).Date >= dateFrom.Date ? x.PreparingQuantity : 0,
+                mainFabricExpenditure = x.CuttingType == "Main Fabric" && x.CuttingInDate.AddHours(7).Date >= dateFrom.Date ? x.PreparingQuantity : 0,
+                remark = x.DesignColor,
+                receipt = 0,
+                productCode = x.ProductCode,
+                remainQty = 0
+            }).ToList();
+
+            var QueryMutationPrepareItemNow = (from d in QueryMutationPrepareNow
 											   join e in garmentPreparingItemRepository.Query on d.Id equals e.GarmentPreparingId
 											   where e.UENItemId == d.DetailExpend
 											   select new monitoringView
 											   {
 												   prepareItemid = e.Identity,
-												   price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == d.RO select aa.Total).FirstOrDefault()),
-												   uomUnit = "",
+                                                   //price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == d.RO select aa.Total).FirstOrDefault()),
+                                                   price = sumbasicPriceDict.ContainsKey(d.RO) ? sumbasicPriceDict[d.RO] : 0,
+                                                   uomUnit = "",
 												   stock = d.Processdate.Value.AddHours(7) < dateFrom ? e.Quantity : 0,
 												   mainFabricExpenditure = 0,
 												   nonMainFabricExpenditure = 0,
@@ -272,30 +311,60 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 												   receipt = (d.Processdate.Value.AddHours(7) >= dateFrom ? e.Quantity : 0),
 												   productCode = e.ProductCode,
 												   remainQty = e.RemainingQuantity
-											   }).Distinct();
+											   }).Distinct().ToList();
 
-			//OLD QUERY
-			//     var QueryAval = from a in (from data in garmentAvalProductRepository.Query where  data.AvalDate <= dateTo select new { data.Identity, data.RONo, data.AvalDate })
-			//                                join b in garmentAvalProductItemRepository.Query on a.Identity equals b.APId
-			//                     join c in garmentPreparingItemRepository.Query on Guid.Parse(b.PreparingItemId) equals c.Identity
-			//                     join d in (from data in garmentPreparingRepository.Query where data.UnitId == request.unit select new { data.Identity, data.RONo }) on c.GarmentPreparingId equals d.Identity
-			//                     select new monitoringView { 
-			//	prepareItemid = c.Identity, 
-			//	price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == a.RONo select aa.BasicPrice / aa.Count).FirstOrDefault()), 
-			//	expenditure = 0, 
-			//	aval = a.AvalDate >= dateFrom ? b.Quantity : 0, 
-			//	uomUnit = "", 
-			//	stock = a.AvalDate < dateFrom ? -b.Quantity : 0, 
-			//	mainFabricExpenditure = 0, 
-			//	nonMainFabricExpenditure = 0, 
-			//	remark = b.DesignColor, 
-			//	receipt = 0, 
-			//	productCode = b.ProductCode, 
-			//	remainQty = 0 
-			//};
+            //OLD QUERY
+            //     var QueryAval = from a in (from data in garmentAvalProductRepository.Query where  data.AvalDate <= dateTo select new { data.Identity, data.RONo, data.AvalDate })
+            //                                join b in garmentAvalProductItemRepository.Query on a.Identity equals b.APId
+            //                     join c in garmentPreparingItemRepository.Query on Guid.Parse(b.PreparingItemId) equals c.Identity
+            //                     join d in (from data in garmentPreparingRepository.Query where data.UnitId == request.unit select new { data.Identity, data.RONo }) on c.GarmentPreparingId equals d.Identity
+            //                     select new monitoringView { 
+            //	prepareItemid = c.Identity, 
+            //	price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == a.RONo select aa.BasicPrice / aa.Count).FirstOrDefault()), 
+            //	expenditure = 0, 
+            //	aval = a.AvalDate >= dateFrom ? b.Quantity : 0, 
+            //	uomUnit = "", 
+            //	stock = a.AvalDate < dateFrom ? -b.Quantity : 0, 
+            //	mainFabricExpenditure = 0, 
+            //	nonMainFabricExpenditure = 0, 
+            //	remark = b.DesignColor, 
+            //	receipt = 0, 
+            //	productCode = b.ProductCode, 
+            //	remainQty = 0 
+            //};
+            var avalProducts = (from data in garmentAvalProductRepository.Query
+                                where data.AvalDate.HasValue &&
+                                      data.AvalDate.Value.AddHours(7).Date <= dateTo.Date
+                                select new
+                                {
+                                    data.Identity,
+                                    data.RONo,
+                                    data.AvalDate
+                                }).ToList();
+            var avalProductItems = garmentAvalProductItemRepository.Query
+                                .Where(item => avalProducts.Select(x => x.Identity).Contains(item.APId))
+                                .AsEnumerable();
+            var preparingItemIds = avalProductItems
+                                .Where(x => !string.IsNullOrEmpty(x.PreparingItemId))
+                                .Select(x => Guid.Parse(x.PreparingItemId))
+                                .ToList();
+            var preparingItems = garmentPreparingItemRepository.Query
+                               .Where(x => preparingItemIds.Contains(x.Identity))
+                               .AsEnumerable();
 
-			//NEW QUERY
-			var QueryAval = from a in (from data in garmentAvalProductRepository.Query
+            var preparingDataIds = preparingItems
+                                .Select(x => x.GarmentPreparingId)
+                                .ToList();
+
+            var preparingData = garmentPreparingRepository.Query
+                                .Where(x => x.UnitId == request.unit && preparingDataIds.Contains(x.Identity))
+                                .Select(x => new
+                                {
+                                    x.Identity,
+                                    x.RONo
+                                }).AsEnumerable();
+            //NEW QUERY
+            var QueryAval = (from a in (from data in garmentAvalProductRepository.Query
 									   where data.AvalDate <= dateTo
 									   select new
 									   {
@@ -304,8 +373,8 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 										   data.AvalDate
 									   })
 							join b in garmentAvalProductItemRepository.Query on a.Identity equals b.APId
-							join c in garmentPreparingItemRepository.Query on Guid.Parse(b.PreparingItemId) equals c.Identity
-							join d in (from data in garmentPreparingRepository.Query
+                            join c in garmentPreparingItemRepository.Query on Guid.Parse(b.PreparingItemId) equals c.Identity
+                            join d in (from data in garmentPreparingRepository.Query
 									   where data.UnitId == request.unit
 									   select new
 									   {
@@ -315,7 +384,8 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 							select new monitoringView
 							{
 								prepareItemid = c.Identity,
-								price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == a.RONo select aa.Total).FirstOrDefault()),
+								//price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == a.RONo select aa.Total).FirstOrDefault()),
+								price = sumbasicPriceDict.ContainsKey(a.RONo) ? sumbasicPriceDict[a.RONo] : 0,
 								expenditure = 0,
 								aval = a.AvalDate >= dateFrom ? b.Quantity : 0,
 								uomUnit = "",
@@ -326,9 +396,9 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 								receipt = 0,
 								productCode = b.ProductCode,
 								remainQty = 0
-							};
+							}).ToList();
 
-			var QueryDRPrepare = from a in (from data in garmentDeliveryReturnRepository.Query
+			var QueryDRPrepare = (from a in (from data in garmentDeliveryReturnRepository.Query
 											where data.ReturnDate <= dateTo && data.UnitId == request.unit
                                             && data.StorageName.Contains("GUDANG BAHAN BAKU")
 											select new
@@ -338,7 +408,7 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 												data.ReturnDate
 											})
 								 join b in (from bb in garmentDeliveryReturnItemRepository.Query
-											where bb.PreparingItemId != "00000000-0000-0000-0000-000000000000"
+											where bb.PreparingItemId != "00000000-0000-0000-0000-000000000000" && bb.PreparingItemId != null
 											select new
 											{
 												bb.PreparingItemId,
@@ -355,16 +425,17 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 									 b.DesignColor,
 									 a.ReturnDate,
 									 b.ProductCode
-								 };
+								 }).AsEnumerable();
 
-			var QueryDeliveryReturn = from a in QueryDRPrepare
+            var QueryDeliveryReturn = (from a in QueryDRPrepare
 									  join c in garmentPreparingItemRepository.Query
 									  on Guid.Parse(a.PreparingItemId) equals (c.Identity)
 									  select new monitoringView
 									  {
 										  prepareItemid = c.Identity,
-										  price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == a.RONo select aa.Total).FirstOrDefault()),
-										  expenditure = a.ReturnDate >= dateFrom ? a.Quantity : 0,
+                                          //price = Convert.ToDecimal((from aa in sumbasicPrice where aa.RO == a.RONo select aa.Total).FirstOrDefault()),
+                                          price = sumbasicPriceDict.ContainsKey(a.RONo) ? sumbasicPriceDict[a.RONo] : 0,
+                                          expenditure = a.ReturnDate >= dateFrom ? a.Quantity : 0,
 										  aval = 0,
 										  uomUnit = "",
 										  stock = a.ReturnDate < dateFrom ? -a.Quantity : 0,
@@ -374,19 +445,30 @@ namespace Manufactures.Application.GarmentPreparings.Queries.GetMonitoringPrepar
 										  receipt = 0,
 										  productCode = a.ProductCode,
 										  remainQty = 0
-									  };
+									  }).ToList();
 
-			var queryNow = (from a in (QueryMutationPrepareItemNow
-							.Union(QueryCuttingDONow)
-							.Union(QueryAval)
-							.Union(QueryDeliveryReturn)
-							.AsEnumerable())
-						   join b in QueryMutationPrepareItemsROASAL
-						   on a.prepareItemid equals b.prepareitemid
-						   select new { a, b }).Distinct();
+			var combinedList = QueryMutationPrepareItemNow
+				.Union(QueryCuttingDONow)
+				.Union(QueryAval)
+				.Union(QueryDeliveryReturn)
+                .AsEnumerable();
+
+            var queryNow = (from a in combinedList
+                            join b in QueryMutationPrepareItemsROASAL
+                            on a.prepareItemid equals b.prepareitemid
+                            select new { a, b }).Distinct()
+                            .ToList();
+
+            //     var queryNow = (from a in (QueryMutationPrepareItemNow
+            //.Union(QueryCuttingDONow)
+            //.Union(QueryAval)
+            //.Union(QueryDeliveryReturn))
+            //  join b in QueryMutationPrepareItemsROASAL
+            //  on a.prepareItemid equals b.prepareitemid
+            //  select new { a, b }).Distinct();
 
 
-			var querySum = queryNow.GroupBy(x => new { x.a.price, x.b.roasal, x.b.roJob, x.b.article, x.b.buyerCode, x.a.productCode, x.a.remark }, (key, group) => new
+            var querySum = queryNow.GroupBy(x => new { x.a.price, x.b.roasal, x.b.roJob, x.b.article, x.b.buyerCode, x.a.productCode, x.a.remark }, (key, group) => new
 			{
 				ROAsal = key.roasal,
 				ROJob = key.roJob,
