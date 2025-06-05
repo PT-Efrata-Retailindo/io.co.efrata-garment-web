@@ -15,7 +15,7 @@ namespace Manufactures.ViewModels.GarmentDeliveryReturns
 
         public GarmentDeliveryReturnItem MapItem(GarmentDeliveryReturnItemDto viewModel, Guid headerId)
         {
-            return new GarmentDeliveryReturnItem(Guid.NewGuid(), headerId, viewModel.UnitDOItemId, viewModel.UENItemId, viewModel.PreparingItemId, new ProductId(viewModel.Product.Id), viewModel.Product.Code, viewModel.Product.Name, viewModel.DesignColor, viewModel.RONo, viewModel.Quantity, new UomId(viewModel.Uom.Id), viewModel.Uom.Unit);
+            return new GarmentDeliveryReturnItem(Guid.NewGuid(), headerId, viewModel.UnitDOItemId, viewModel.UENItemId, viewModel.PreparingItemId, new ProductId(viewModel.Product.Id), viewModel.Product.Code, viewModel.Product.Name, viewModel.DesignColor, viewModel.RONo, viewModel.Quantity, new UomId(viewModel.Uom.Id), viewModel.Uom.Unit, viewModel.Colour, viewModel.Rack, viewModel.Level, viewModel.Box, viewModel.Area);
         }
     }
 }
