@@ -93,7 +93,7 @@ namespace Manufactures.Application.GarmentDeliveryReturns.CommandHandlers
                 await _garmentDeliveryReturnItemRepository.Update(dbItem);
             }
 
-            addedItems.Select(x => new GarmentDeliveryReturnItem(Guid.NewGuid(), garmentDeliveryReturn.Identity, x.UnitDOItemId, x.UENItemId, x.PreparingItemId, new ProductId(x.Product.Id), x.Product.Code, x.Product.Name, x.DesignColor, x.RONo, x.Quantity, new UomId(x.Uom.Id), x.Uom.Unit)).ToList()
+            addedItems.Select(x => new GarmentDeliveryReturnItem(Guid.NewGuid(), garmentDeliveryReturn.Identity, x.UnitDOItemId, x.UENItemId, x.PreparingItemId, new ProductId(x.Product.Id), x.Product.Code, x.Product.Name, x.DesignColor, x.RONo, x.Quantity, new UomId(x.Uom.Id), x.Uom.Unit, x.Colour, x.Rack, x.Level, x.Box, x.Area)).ToList()
                 .ForEach(async x => await _garmentDeliveryReturnItemRepository.Update(x));
 
             foreach (var itemDeleted in requestTempItems)

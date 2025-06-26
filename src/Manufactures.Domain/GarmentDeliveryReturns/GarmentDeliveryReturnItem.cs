@@ -22,8 +22,13 @@ namespace Manufactures.Domain.GarmentDeliveryReturns
         public double Quantity { get; private set; }
         public UomId UomId { get; private set; }
         public string UomUnit { get; private set; }
+        public string Colour { get; set; }
+        public string Rack { get; set; }
+        public string Level { get; set; }
+        public string Box { get; set; }
+        public string Area { get; set; }
 
-        public GarmentDeliveryReturnItem(Guid identity, Guid drId, int unitDOItemId, int uenItemId, string preparingItemId, ProductId productId, string productCode, string productName, string designColor, string roNo, double quantity, UomId uomId, string uomUnit) : base(identity)
+        public GarmentDeliveryReturnItem(Guid identity, Guid drId, int unitDOItemId, int uenItemId, string preparingItemId, ProductId productId, string productCode, string productName, string designColor, string roNo, double quantity, UomId uomId, string uomUnit, string colour, string rack,string level,string box,string area) : base(identity)
         {
             this.MarkTransient();
 
@@ -40,6 +45,11 @@ namespace Manufactures.Domain.GarmentDeliveryReturns
             Quantity = quantity;
             UomId = uomId;
             UomUnit = uomUnit;
+            Colour = colour;
+            Rack = rack;
+            Level = level;
+            Box = box;
+            Area = area;
 
             ReadModel = new GarmentDeliveryReturnItemReadModel(identity)
             {
@@ -55,6 +65,11 @@ namespace Manufactures.Domain.GarmentDeliveryReturns
                 Quantity = Quantity,
                 UomId = UomId.Value,
                 UomUnit = UomUnit,
+                Colour = Colour,
+                Rack = Rack,
+                Level = Level,
+                Box = Box,
+                Area = Area,
             };
             ReadModel.AddDomainEvent(new OnGarmentDeliveryReturnPlaced(this.Identity));
         }
@@ -72,6 +87,11 @@ namespace Manufactures.Domain.GarmentDeliveryReturns
             Quantity = ReadModel.Quantity;
             UomId = new UomId(ReadModel.UomId);
             UomUnit = ReadModel.UomUnit;
+            Colour = ReadModel.Colour;
+            Rack = ReadModel.Rack;
+            Level = ReadModel.Level;
+            Box = ReadModel.Box;
+            Area = ReadModel.Area;
         }
 
         public void setUnitDOItemId(int newUnitDOItemId)
