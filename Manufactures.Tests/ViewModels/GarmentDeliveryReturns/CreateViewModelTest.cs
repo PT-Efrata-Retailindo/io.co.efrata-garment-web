@@ -16,7 +16,8 @@ namespace Manufactures.Tests.ViewModels.GarmentDeliveryReturns
             var date = DateTimeOffset.Now;
             var items = new List<GarmentDeliveryReturnItemValueObject>()
                 {
-                    new GarmentDeliveryReturnItemValueObject(id,id,1,1,"preparingItemId",new Product(),"designColor","roNo",1,new Uom(),id,1,1,true)
+                     new GarmentDeliveryReturnItemValueObject(id,id,1,1,id.ToString(),new Product(),"DesignColor","roNo",1,new Uom(),id,1,1,true,"Colour","Rack","Level","Box","Area"),
+
                 };
             CreateViewModel viewModel = new CreateViewModel()
             {
