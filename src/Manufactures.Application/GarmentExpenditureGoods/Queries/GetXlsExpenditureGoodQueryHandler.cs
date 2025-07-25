@@ -352,7 +352,7 @@ namespace Manufactures.Application.GarmentExpenditureGoods.Queries
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NAMA BARANG", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "SATUAN", DataType = typeof(string) });
 			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "JUMLAH", DataType = typeof(double) });
-			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "INVOICE", DataType = typeof(double) });
+			reportDataTable.Columns.Add(new DataColumn() { ColumnName = "INVOICE", DataType = typeof(string) });
             //reportDataTable.Columns.Add(new DataColumn() { ColumnName = "MATA UANG", DataType = typeof(string) });
             //reportDataTable.Columns.Add(new DataColumn() { ColumnName = "NILAI BARANG", DataType = typeof(decimal) });
             int counter = 5;
